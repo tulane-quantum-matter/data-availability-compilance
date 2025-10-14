@@ -1,0 +1,88 @@
+&VAR_ham_name
+ham_name = "TSC"           ! topo sc
+/
+
+&VAR_lattice               !!
+L1           = 10            ! Length in direction a_1
+L2           = 10            ! Length in direction a_2
+Lattice_type = "Bilayer_square"     !
+Model        = "TSC_BCFT"    ! 
+/
+
+&VAR_TSC                 !! Variables for Topological superconductor 
+ham_T     = 1            ! Hopping parameter
+ham_delta = 0.4
+ham_chem  = -0.5            ! Chemical potential
+ham_U = 5.0
+ham_dUedge     = 0.d0       ! Hubbard interaction on edge change
+Dtau      = 0.05           ! Thereby Ltrot=Beta/dtau
+Beta      = 85.0            ! Inverse temperature
+Projector = .F.             ! Whether the projective algorithm is used
+Theta     = 100.d0           ! Projection parameter
+Symm      = .F.             ! Whether symmetrization takes place
+open_boundary=.T.             !
+no_self_opx=.F.             ! No self-coupling via hopping or rashba
+no_accumulate_opx=.F.       ! Do not add to existing bonds / interaction pairs
+Hubbard_Mz = .T.
+/
+
+&VAR_QMC                   !! Variables for the QMC run
+Nwrap=4
+NSweep               = 22   ! Number of sweeps
+NBin                 = 400    ! Number of bins
+Ltau                 = 0    ! 1 to calculate time-displaced Green functions; 0 otherwise
+LOBS_ST              = 0    ! Start measurements at time slice LOBS_ST
+LOBS_EN              = 0    ! End measurements at time slice LOBS_EN
+CPU_MAX              = 0.0  ! Code stops after CPU_MAX hours, if 0 or not
+                            ! specified, the code stops after Nbin bins
+Propose_S0           = .F.  ! Proposes single spin flip moves with probability exp(-S0) 
+Global_moves         = .F.  ! Allows for global moves in space and time 
+N_Global             = 1    ! Number of global moves per sweep 
+Global_tau_moves     = .F.  ! Allows for global moves on a single time slice.  
+N_Global_tau         = 1    ! Number of global moves that will be carried out on a 
+                            ! single time slice
+Nt_sequential_start  = 0    ! One can combine sequential and global moves on a time slice
+Nt_sequential_end    = -1   ! The program then carries out sequential local moves in the
+                            ! range [Nt_sequential_start, Nt_sequential_end] followed by
+                            ! N_Global_tau global moves
+Langevin            = .F.   ! Langevin update
+Delta_t_Langevin_HMC=0.1    ! Default time step for Langevin and HMC updates
+Max_Force           = 5.0   ! Max Force for  Langevin
+HMC                 = .F.   ! HMC update
+Leapfrog_steps      = 0     ! Number of leapfrog interations
+/
+
+&VAR_errors                !! Variables for analysis programs
+n_skip  = 1                 ! Number of bins that to be skipped.
+N_rebin = 1                 ! Rebinning  
+N_Cov   = 0                 ! If set to 1 covariance computed for non-equal-time
+                            ! correlation functions
+/  
+
+&VAR_TEMP                  !! Variables for parallel tempering
+N_exchange_steps      = 6   ! Number of exchange moves #[see Eq.~\eqref{eq:exchangestep}]#
+N_Tempering_frequency = 10  ! The frequency in units of sweeps at which the
+                            ! exchange moves are carried out
+mpi_per_parameter_set = 2   ! Number of mpi-processes per parameter set
+Tempering_calc_det    = .T. ! Specifies whether the fermion weight has to be taken
+                            ! into account while tempering. The default is .true.,
+                            ! and it can be set to .F. if the parameters that
+                            ! get varied only enter the Ising action S_0
+/
+
+&VAR_Max_Stoch             !! Variables for Stochastic Maximum entropy
+Ngamma     = 400            ! Number of Dirac delta-functions for parametrization
+Om_st      = -10.d0         ! Frequency range lower bound
+Om_en      = 10.d0          ! Frequency range upper bound
+NDis       = 2000           ! Number of boxes for histogram
+Nbins      = 250            ! Number of bins for Monte Carlo
+Nsweeps    = 70             ! Number of sweeps per bin
+NWarm      = 20             ! The Nwarm first bins will be ommitted
+N_alpha    = 14             ! Number of temperatures
+alpha_st   = 1.d0           ! Smallest inverse temperature increment for inverse
+R          = 1.2d0          ! temperature (see above) 
+Checkpoint = .F.            ! Whether to produce dump files, allowing the simulation
+                            ! to be resumed later on
+Tolerance  = 0.1d0          ! Data points for which the relative error exceeds the
+                            ! tolerance threshold will be omitted.
+/
